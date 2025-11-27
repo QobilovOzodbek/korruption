@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ANTI-CORRUPTION PLATFORM{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/expert_panel.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- 🔹 Navbar -->
+    <header>
+        <nav class="container">
+            <div class="logo">ANTI-CORRUPTION PLATFORM</div>
+            <ul>
+                <li><a href="{% url 'home' %}" class="{% if request.path == '/' %}current{% endif %}">Bosh sahifa</a>
+                </li>
+                <li><a href="{% url 'statistics' %}"
+                        class="{% if '/statistics' in request.path %}current{% endif %}">Statistika</a></li>
+                <li><a href="{% url 'check_status' %}">Holatni Tekshirish</a></li>
+                <li><a href="{% url 'contact' %}"
+                        class="{% if '/contact' in request.path %}current{% endif %}">Bog'lanish</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 🔹 Asosiy kontent -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- 🔹 Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <p>&copy; 2025 ANTI-CORRUPTION PLATFORM. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Bog'lanish - ANTI-CORRUPTION PLATFORM{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-top: 30px;
+        padding-bottom: 50px;
+    }
+
+    .contact-form-block {
+        background-color: var(--white-color);
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-top: 5px solid var(--secondary-color);
+    }
+
+    .contact-form-block h2 {
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .contact-form-block .form-group {
+        margin-bottom: 25px;
+    }
+
+    .contact-form-block input[type="text"],
+    .contact-form-block input[type="email"],
+    .contact-form-block textarea {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    .contact-info-block {
+        height: fit-content;
+        padding: 30px;
+        background: #f8f8f8;
+        border-radius: 10px;
+        border-left: 5px solid var(--primary-color);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    @media(max-width: 900px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="content">
+        <h1 style="text-align: center; margin-bottom: 30px; color: var(--primary-color);">
+            Aloqa va Murojaat Markazi
+        </h1>
+    </div>
+
+    <section class="contact-grid">
+
+        <div class="contact-form-block">
+            <h2><i class="fa-solid fa-handshake" style="margin-right: 10px;"></i> Bizga Xabar Yuboring</h2>
+            <p style="text-align: center; color: #777; margin-bottom: 30px;">
+                Savol, taklif yoki hamkorlik bo'yicha murojaatingizni yuboring. Maxfiylik kafolatlanadi.
+            </p>
+
+            <form action="{% url 'contact' %}" method="POST" id="contact-form">
+                {% csrf_token %}
+
+                {% if success %}
+                <p style="color: green; text-align:center; font-weight: bold;">
+                    ✅ Xabaringiz muvaffaqiyatli yuborildi!
+                </p>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="name"><i class="fa-solid fa-user-circle"></i> Ism-Sharif:</label>
+                    <input type="text" id="name" name="name" required placeholder="To'liq ism-sharifingizni kiriting">
+                </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fa-solid fa-at"></i> Elektron Pochta:</label>
+                    <input type="email" id="email" name="email" required placeholder="namuna@pochta.uz">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject"><i class="fa-solid fa-bookmark"></i> Mavzu:</label>
+                    <input type="text" id="subject" name="subject" required
+                        placeholder="Murojaat mavzusi (Masalan: Texnik yordam so'rash)">
+                </div>
+
+                <div class="form-group">
+                    <label for="message"><i class="fa-solid fa-comment-dots"></i> Xabar Matni:</label>
+                    <textarea id="message" name="message" rows="8" required
+                        placeholder="Xabaringizni bu yerga batafsil yozing..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                    <i class="fa-solid fa-envelope-open-text"></i> Xabarni Yuborish
+                </button>
+            </form>
+        </div>
+
+        <div class="contact-info-block">
+            <h2 style="color: var(--dark-color); margin-top: 0; margin-bottom: 25px; text-align: left;">
+                <i class="fa-solid fa-circle-info" style="margin-right: 10px; color: var(--primary-color);"></i>
+                Muhim Ma'lumotlar
+            </h2>
+
+            <div class="info-item">
+                <div class="icon"><i class="fa-solid fa-location-dot"></i></div>
+                <p><strong>Manzil:</strong> Buxoro sh., Qayum murtazoyev ko'chasi, 15-uy</p>
+            </div>
+
+            <div class="info-item">
+                <div class="icon"><i class="fa-solid fa-phone"></i></div>
+                <p><strong>Ishonch Liniyasi:</strong>
+                    <a href="tel:+998652232884">+998 (65)-223-28-84</a>
+                </p>
+            </div>
+
+            <div class="info-item">
+                <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+                <p><strong>Email:</strong>
+                    <a href="mailto:bstu_info@edu.uz">bstu_info@edu.uz</a>
+                </p>
+            </div>
+
+            <div class="info-item">
+                <div class="icon"><i class="fa-solid fa-clock"></i></div>
+                <p><strong>Ish vaqti:</strong> Dushanba - Juma: 9:00 - 18:00</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

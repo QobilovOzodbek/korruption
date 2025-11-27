@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Panel - Korrupsiya Platformasi{% endblock %}
+
+{% block extra_head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/expert_panel.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard container">
+    <h1><i class="fa-solid fa-user-shield"></i> Administrator Paneli</h1>
+    <p class="text-center text-secondary mb-4">Tizimdagi barcha murojaatlarni kuzatish, tahlil qilish va boshqarish uchun.</p>
+
+    <!-- === STATISTICS === -->
+    <div class="stats-cards">
+        <div class="stat-card">
+            <i class="fa-solid fa-inbox fa-2x text-info"></i>
+            <div class="stat-value">{{ total }}</div>
+            <h3>Jami murojaatlar</h3>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-circle-check fa-2x text-success"></i>
+            <div class="stat-value">{{ resolved }}</div>
+            <h3>Hal qilingan</h3>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-hourglass-half fa-2x text-warning"></i>
+            <div class="stat-value">{{ pending }}</div>
+            <h3>Ko‘rib chiqilmoqda</h3>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-ban fa-2x text-danger"></i>
+            <div class="stat-value">{{ rejected }}</div>
+            <h3>Rad etilgan</h3>
+        </div>
+    </div>
+
+    <!-- === FILTER === -->
+    <div class="filter-card">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label>Murojaat turi</label>
+                <select name="appeal_type" class="form-select">
+                    <option value="all">Barchasi</option>
+                    <option value="Pora">Pora</option>
+                    <option value="Homiylik">Homiylik</option>
+                    <option value="Ishga joylashish">Ishga joylashish</option>
+                    <option value="Davlat xaridi">Davlat xaridi</option>
+                    <option value="Boshqa">Boshqa</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Holat</label>
+                <select name="status" class="form-select">
+                    <option value="all">Barchasi</option>
+                    <option value="resolved">Hal qilingan</option>
+                    <option value="pending">Ko‘rib chiqilmoqda</option>
+                    <option value="rejected">Rad etilgan</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Boshlanish sana</label>
+                <input type="date" name="from" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label>Tugash sana</label>
+                <input type="date" name="to" class="form-control">
+            </div>
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary mt-3">
+                    <i class="fa-solid fa-filter"></i> Filtrlash
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- === CHART === -->
+    <div class="chart-card">
+        <h5><i class="fa-solid fa-chart-pie"></i> Holatlar bo‘yicha tahlil</h5>
+        <canvas id="adminChart" height="100"></canvas>
+    </div>
+
+    <!-- === TABLE === -->
+    <div class="table-card">
+        <h5 class="mb-3"><i class="fa-solid fa-table-list"></i> Murojaatlar ro‘yxati</h5>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Murojaat turi</th>
+                        <th>F.I.Sh</th>
+                        <th>Status</th>
+                        <th>Yuborilgan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reports %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ r.get_appeal_type_display }}</td>
+                        <td>{{ r.full_name|default:"Anonim" }}</td>
+                        <td>
+                            {% if r.status == 'resolved' %}
+                            <span class="badge bg-success">Hal qilingan</span>
+                            {% elif r.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">Ko‘rib chiqilmoqda</span>
+                            {% elif r.status == 'rejected' %}
+                            <span class="badge bg-danger">Rad etilgan</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ r.created_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Ma’lumot topilmadi</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- === CHART.JS SCRIPT === -->
+<script>
+    const ctx = document.getElementById("adminChart").getContext("2d");
+    new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: ["Hal qilingan", "Ko‘rib chiqilmoqda", "Rad etilgan"],
+            datasets: [{
+                data: [{{ resolved }}, {{ pending }}, {{ rejected }}],
+                backgroundColor: ["#22c55e", "#facc15", "#ef4444"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: { color: "#cbd5e1", font: { size: 14 } }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

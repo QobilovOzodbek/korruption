@@ -1,0 +1,139 @@
+/* expert_panel.css */
+
+/* === GLOBAL REFINEMENTS === */
+body {
+    background-color: #0f172a; /* To'q fon */
+    color: #cbd5e1; /* Matnni ochroq qilamiz (#e2e8f0 dan) */
+    font-family: "Inter", sans-serif;
+}
+
+.dashboard h1 {
+    color: #38bdf8; /* Asosiy aksent rang (Sky Blue) */
+    font-weight: 800; /* Qalinroq */
+    letter-spacing: 0.5px; /* Kengaytirilgan sarlavha */
+    text-align: center;
+    margin-bottom: 50px; /* Ajratishni oshiramiz */
+}
+
+/* === CARD STYLE REFINEMENTS === */
+.stat-card,
+.filter-card,
+.chart-card,
+.table-card {
+    background: #1e293b; /* Kartalar uchun fon rangi */
+    border-radius: 18px; /* Barcha kartalar uchun radiusni oshiramiz (zamonaviy ko'rinish) */
+    padding: 30px; /* Barcha kartalar uchun paddingni oshiramiz */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Chuqurroq soya */
+    border: 1px solid rgba(56, 189, 248, 0.1); /* Aksent rangli yupqa chegara qo'shamiz */
+}
+
+
+/* === STATISTIC CARDS REFINEMENTS === */
+.stat-card {
+    background: linear-gradient(135deg, #1e293b 0%, #172436 100%); /* Tekis rang o'rniga yengil gradient */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid #334155; /* Chegarani aniqroq qilamiz */
+}
+
+.stat-card:hover {
+    transform: translateY(-8px); /* Effektni kuchaytiramiz */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+}
+
+.stat-card h3 {
+    font-size: 14px; /* Kichikroq va oqroq */
+    color: #94a3b8;
+    margin-top: 15px; /* Yuqoridan masofa */
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.stat-value {
+    font-size: 36px; /* Kattaroq */
+    font-weight: 800;
+    color: #38bdf8;
+    line-height: 1.2;
+}
+
+/* === FORM ELEMENTS REFINEMENTS === */
+.filter-card label {
+    color: #94a3b8; /* Ochroq rang */
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.filter-card select,
+.filter-card input {
+    background: #0f172a;
+    color: #cbd5e1;
+    border: 1px solid #334155; /* Chegarani aniqroq qilamiz */
+    border-radius: 10px; /* Radiusni oshiramiz */
+    height: 45px; /* Balandlikni belgilaymiz */
+    padding: 0 15px;
+    transition: border-color 0.2s;
+}
+
+.filter-card select:focus,
+.filter-card input:focus {
+    border-color: #38bdf8; /* Focus bo'lganda aksent rangda bo'lsin */
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    outline: none;
+}
+
+.filter-card button {
+    background-color: #38bdf8; /* Ko'k rang o'rniga aksent rang */
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.filter-card button:hover {
+    background-color: #0ea5e9; /* Yengilroq ko'k */
+}
+
+/* === CHART & TABLE REFINEMENTS === */
+.chart-card h5 {
+    color: #cbd5e1; /* Matn rangini o'zgartiramiz */
+    font-weight: 600;
+    margin-bottom: 25px;
+    font-size: 18px;
+}
+
+.table thead {
+    background-color: #38bdf8; /* Asosiy ko'k rang o'rniga aksent rang */
+    color: #0f172a; /* Qora fon */
+    font-weight: 700;
+}
+
+.table th {
+    border: none;
+    padding: 15px; /* Paddingni oshiramiz */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.table td {
+    padding: 12px 15px;
+    border-top: 1px solid #334155; /* Gorizontal chiziqni aniqroq qilamiz */
+}
+
+.table tbody tr:hover {
+    background-color: rgba(56, 189, 248, 0.05); /* Hover fonini aksent rang bilan qilamiz */
+}
+
+.badge {
+    padding: 5px 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table-responsive {
+    border-radius: 12px; /* Umumiy table atrofini ham yumaloq qilamiz */
+    overflow: hidden;
+}

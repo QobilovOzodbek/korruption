@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Murojaat Holatini Tekshirish{% endblock %}
+
+{% block content %}
+<section class="container" style="margin-top: 50px; margin-bottom: 80px;">
+    <h1 style="text-align:center; color: var(--primary-color); margin-bottom: 30px;">
+        Murojaat Holatini Tekshirish
+    </h1>
+
+    <form method="POST" action="{% url 'check_status' %}" class="card"
+        style="max-width:600px; margin:auto; padding:30px;">
+        {% csrf_token %}
+        <label for="tracking_code" style="font-weight:bold;">Kuzatuv kodi:</label>
+        <input type="text" name="tracking_code" id="tracking_code" placeholder="Masalan: ACR-3F9E7B" required
+            style="width:100%; padding:12px; margin:10px 0; border-radius:6px; border:1px solid #ccc;">
+        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
+            <i class="fa-solid fa-magnifying-glass"></i> Holatni Tekshirish
+        </button>
+    </form>
+
+    {% if result %}
+    <div class="card"
+        style="max-width:600px; margin:40px auto; padding:30px; border-left:5px solid var(--primary-color);">
+        <h3><i class="fa-solid fa-circle-info"></i> Murojaat Tafsilotlari</h3>
+        <p><strong>Kod:</strong> {{ result.tracking_code }}</p>
+        <p><strong>Murojaat turi:</strong> {{ result.get_appeal_type_display }}</p>
+
+        <p><strong>Holat:</strong>
+            {% if result.status == "new" %}
+            🟠 Yangi
+            {% elif result.status == "in_progress" %}
+            🟡 Ko‘rib chiqilmoqda
+            {% elif result.status == "resolved" %}
+            🟢 Hal qilindi
+            {% elif result.status == "rejected" %}
+            🔴 Rad etilgan
+            {% else %}
+            🟡 Ko‘rib chiqilmoqda
+            {% endif %}
+        </p>
+
+        <p><strong>Yuborilgan:</strong> {{ result.created_at|date:"d.m.Y H:i" }}</p>
+        <hr>
+        <p><strong>Xabar:</strong><br>{{ result.message }}</p>
+    </div>
+
+    {% elif not_found %}
+    <div class="card" style="max-width:600px; margin:40px auto; padding:30px; border-left:5px solid red;">
+        <p style="color:red;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Bunday kod topilmadi. Iltimos, to‘g‘ri kiritganingizni tekshiring.
+        </p>
+    </div>
+
+    {% endif %}
+</section>
+{% endblock %}

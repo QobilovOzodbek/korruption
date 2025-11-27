@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bosh sahifa - ANTI-CORRUPTION PLATFORM{% endblock %}
+
+{% block content %}
+
+<section class="hero container">
+    <h1>Korrupsiyaga Qarshi Kurashda Faol Bo'ling!</h1>
+    <p>Anonim xabar bering, adolatni tiklashga yordam bering. Har bir xabar muhim.</p>
+
+    <div class="hero-buttons">
+        <button type="button" class="btn btn-primary" id="openInitialModal">
+            <i class="fa-solid fa-flag"></i> Korrupsiya Holati Haqida Xabar Berish
+        </button>
+        <a href="{% url 'statistics' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-chart-line"></i> Statistikani Ko'rish
+        </a>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container">
+        <h2>Nega Bizga Ishonishingiz Kerak?</h2>
+
+        <div class="services">
+            <div class="service-card">
+                <i class="fa-solid fa-user-secret fa-3x" style="color: var(--primary-color);"></i>
+                <h3>To'liq Anonimlik</h3>
+                <p>Sizning shaxsingiz maxfiy qolishi kafolatlanadi. Ma'lumotlaringiz himoyalangan.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-shield-halved fa-3x" style="color: var(--primary-color);"></i>
+                <h3>Ma'lumotlar Xavfsizligi</h3>
+                <p>Barcha yuklangan dalillar va matnlar shifrlangan tizimda saqlanadi.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-receipt fa-3x" style="color: var(--primary-color);"></i>
+                <h3>Tezkor Reaksiya</h3>
+                <p>Har bir murojaat mutaxassislar guruhi tomonidan zudlik bilan ko'rib chiqiladi.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-magnifying-glass-chart fa-3x" style="color: var(--primary-color);"></i>
+                <h3>Murojaatni Kuzatish</h3>
+                <p>Sizga beriladigan maxsus ID orqali xabaringiz holatini kuzatib borishingiz mumkin.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+    <div class="contact-form-section">
+        <h2>Adolat uchun bir qadam!</h2>
+        <p>Korrupsiyaga duch keldingizmi? Jim turmang! Bizga ishonchli xabar yuboring.</p>
+        <button type="button" class="btn btn-primary" id="openReportFormButton">
+            <i class="fa-solid fa-bullhorn"></i> Hoziroq Xabar Berish
+        </button>
+    </div>
+</section>
+
+<!-- Modallar -->
+<div id="initialModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" data-modal="initialModal">&times;</span>
+        <h2>Xabarni Qanday Yuborishni Istaysiz?</h2>
+        <p>Iltimos, siz uchun qulay bo'lgan usulni tanlang. Anonimlik to'liq kafolatlanadi.</p>
+
+        <div class="modal-actions">
+            <button id="btnYes" class="btn btn-primary"><i class="fa-solid fa-mask"></i> Anonim Xabar
+                Berish</button>
+            <button id="btnNo" class="btn btn-secondary"><i class="fa-solid fa-user"></i> Shaxsiy Ma'lumotlarim
+                Bilan</button>
+        </div>
+    </div>
+</div>
+
+<div id="contactFormModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" data-modal="contactFormModal">&times;</span>
+        <h2><i class="fa-solid fa-magnifying-glass"></i> Korrupsiya Xabari Formasi</h2>
+
+        <form action="{% url 'home' %}" method="POST" id="submissionForm" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="appeal_type">Murojaat Turi:</label>
+                <select id="appeal_type" name="appeal_type" required>
+                    <option value="">— Turini tanlang —</option>
+                    <option value="Pora">To'g'ridan-to'g'ri Pora talabi</option>
+                    <option value="Homiylik">Noqonuniy Homiylik/Grant</option>
+                    <option value="Ishga joylashish">Ishga joylashishdagi Korrupsiya</option>
+                    <option value="Davlat xaridi">Davlat xaridlarida suiiste'mol</option>
+                    <option value="Boshqa">Boshqa turdagi holat</option>
+                </select>
+            </div>
+
+            <div id="personal-info-fields" class="grid-2-columns">
+                <div class="form-group">
+                    <label for="full_name">To'liq Ism (Majburiy):</label>
+                    <input type="text" id="full_name" name="full_name" placeholder="Ismingizni kiriting" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Telefon Raqam:</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="tel" id="phone" name="phone" placeholder="+998 XX YYY YY YY" required
+                            style="flex: 1;">
+                        <button type="button" id="send-sms" class="btn btn-secondary" style="white-space: nowrap;">
+                            SMS yuborish
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMS verification -->
+            <div id="sms-section" style="display: none; margin-top: 10px;">
+                <label for="sms-code">📩 SMS kodi (demo: 12345)</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="sms-code" placeholder="SMS kodni kiriting" style="flex: 1;">
+                    <button type="button" id="verify-code" class="btn btn-primary">Tasdiqlash</button>
+                </div>
+            </div>
+
+            <div id="verify-result" style="display: none; margin-top: 10px;">
+                <p style="color: green; font-weight: bold;">✅ Telefon raqami tasdiqlandi!</p>
+                <p><strong>Kuzatuv kodi:</strong> <span id="tracking-code" style="color: var(--primary-color);"></span>
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Xabaringiz Matni (Voqea Tavsifi):</label>
+                <textarea id="message" name="message" rows="6" required
+                    placeholder="Korrupsiyaviy holat tafsilotlarini yozing..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="file">Dalil Fayllarni Biriktirish:</label>
+                <input type="file" id="file" name="file"
+                    accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .mp4, .avi, .mov">
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 20px;"
+                disabled>
+                <i class="fa-solid fa-paper-plane"></i> Xabarni Yuborish
+            </button>
+        </form>
+
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/verify_sms.js' %}"></script>
+<script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}
